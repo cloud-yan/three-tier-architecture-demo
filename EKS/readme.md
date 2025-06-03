@@ -128,6 +128,8 @@ kubectl get svc -n robot-shop
 ```
 Wait approximately 5 minutes for the ALB to become active before accessing the URL.
 
+![alt text](image.png)
+
 ## References
 - [EKS Persistent Storage Knowledge Center](https://repost.aws/knowledge-center/eks-persistent-storage)
 - AWS Documentation for ALB Controller and EBS CSI Driver
