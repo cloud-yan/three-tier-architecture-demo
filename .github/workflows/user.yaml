@@ -1,0 +1,42 @@
+name: User
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '**.js'  # Only trigger on changes to Python files (**.py)
+      - '.github/workflows/user.yaml'  # Include workflow file changes
+
+  pull_request:
+    branches:
+      - master
+    paths:
+      - '**.js'  # Only trigger on changes to Python files (**.py)
+      - '.github/workflows/user.yaml'  # Include workflow file changes
+
+jobs:
+  payment:
+    name: Build and deploy user microservice
+    runs-on: [self-hosted]  # Use a standard runner instead of self-hosted
+
+    steps:
+      - name: Checkout code 
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: NPM install
+        run: npm install 
+
+      - name: Build Docker image
+        run: |
+          docker build -t user .  # Build image tagged as 'payment' from current directory
+
+      - name: Docker Login (use secrets)
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Docker Push
+        run: |
+          docker tag user ${name}/user:latest
+          docker user ${name}/user:latest

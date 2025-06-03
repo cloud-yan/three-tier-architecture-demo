@@ -1,0 +1,12 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: robot-shop-gclb
+  annotations:
+    kubernetes.io/ingress.backend: "robot-shop"
+    kubernetes.io/ingress.class: gce
+spec:
+  backend:
+    serviceName: "robot-shop"
+    servicePort: 8080
+

@@ -1,0 +1,44 @@
+name: Dispatch
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '**.go'  # Only trigger on changes to Python files (**.py)
+      - '.github/workflows/dispatch.yaml'  # Include workflow file changes
+
+  pull_request:
+    branches:
+      - master
+    paths:
+      - '**.go'  # Only trigger on changes to Python files (**.py)
+      - '.github/workflows/dispatch.yaml'  # Include workflow file changes
+
+jobs:
+  payment:
+    name: Build and deploy dispatch microservice
+    runs-on: [self-hosted]  # Use a standard runner instead of self-hosted
+
+    steps:
+      - name: Checkout code 
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name:  Go install
+        run: |
+            curl -sL https://dl.google.com/go/go1.18.linux-amd64.tar.gz |
+            export PATH=$PATH:/home/runner/go/bin
+
+      - name: Build Docker image
+        run: |
+          docker build -t payment .  # Build image tagged as 'payment' from current directory
+
+      - name: Docker Login (use secrets)
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Docker Push
+        run: |
+          docker tag dispatch ${name}/dispatch:latest
+          docker push ${name}/dispatch:latest
