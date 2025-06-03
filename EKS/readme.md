@@ -6,12 +6,12 @@
 
 ## 1. Create EKS Cluster
 ```bash
-eksctl create cluster --name demo-cluster --region us-east-1
+eksctl create cluster --name <your-cluster-name> --region us-east-1
 ```
 
 ## 2. Configure IAM OIDC Provider
 ```bash
-eksctl utils associate-iam-oidc-provider --cluster demo-cluster --approve
+eksctl utils associate-iam-oidc-provider --cluster <your-cluster-name> --approve
 ```
 
 ## 3. Setup ALB Add-on
@@ -107,7 +107,7 @@ eksctl create addon --name aws-ebs-csi-driver \
 
 ### Clone Repository
 ```bash
-git clone <my-url>
+git clone https://github.com/cloud-yan/three-tier-architecture-demo
 cd three-tier-architecture-demo/EKS/helm
 ```
 
